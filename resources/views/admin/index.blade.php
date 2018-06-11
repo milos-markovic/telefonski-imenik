@@ -21,10 +21,8 @@
                 <td>{{ ucfirst($admin->firstName) }}</td>
                 <td>{{ ucfirst($admin->lastName) }}</td>
                 <td>{{ $admin->email }}</td>
-                @if(!Auth::user())
-                <td><a href='{{ route('admin.edit',$admin->id) }}'>Update</a></td>
-                <td><a href="{{ route('admin.delete',$admin->id) }}">Delete</a></td>
-                @endif
+                <td><a href='{{ route('admins.edit',$admin->id) }}'>Update</a></td>
+                <td><a href='{{ route('admins.destroy',$admin->id) }}'>Delete</a></td>
             </tr>
             @endforeach
         </tbody>
@@ -33,7 +31,7 @@
     <h3>Insert new admin</h3>
 @endif<br>
 
-<a href="{{ url('admin/create') }}" class="btn btn-primary" >New admin</a>
+<a href="{{ route('admins.create') }}" class="btn btn-primary" >New admin</a>
 
 @stop
 

@@ -39,17 +39,19 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('sendEmail/{id}','AddressController@getSendEmail');
     Route::post('sendEmail/{id}','AddressController@postSendEmail');
     
-    Route::resource('admin','AdminController',['except' => ['show']] );
-    Route::get('admin/delete/{id}',['as'=>'admin.delete','uses'=>'AdminController@delete']);
+
+    Route::resource('admins','AdminController');
+    Route::get('admins/{admin}/destoy',['uses' => 'AdminController@destroy', 'as' => 'admins.destroy']);
+    Route::get('admin/users','AdminController@users');
+    Route::get('admin/users/{user}/edit',['uses' => 'AdminController@editUser', 'as' => 'admins.editUser']);
+    Route::post('admin/users/{user}/update',['uses' => 'AdminController@updateUser', 'as' => 'admins.updateUser']);
+    Route::get('admin/users/create',['uses' => 'AdminController@createUser', 'as' => 'admins.createUser']);
+    Route::post('admin/users/store',['uses' => 'AdminController@storeUser', 'as' => 'admins.storeUser']);
+    Route::get('admin/user/{user}/destroy',['uses' => 'AdminController@destroyUser', 'as' => 'admins.destroyUser']);
     
-    Route::get('admin/users',['as'=>'adminUsers','uses'=>'UserController@getAdminUsers']);
-    Route::get('admin/user/edit/{id}',['as'=>'editAdminUser','uses'=>'UserController@getEditAdminUser']);
-    Route::post('admin/user/update/{id}',['as'=>'updateAdminUser','uses'=>'UserController@postUpdateAdminUser']);
-    Route::get('admin/user/create','UserController@getNewAdminUser');
-    Route::post('admin/user/create',['as'=>'storeAdminUser','uses'=>'UserController@postNewUser']);
-    Route::get('admin/user/delete/{id}',['as'=>'deleteAdminUser','uses'=>'UserController@getDeleteAdminUser']);
+    Route::resource('users','UserController');
+    Route::get('users/{user}/destoy',['uses' => 'UserController@destroy', 'as' => 'users.destroy']);
     
-    Route::get('user','UserController@getUser');
     
     Route::resource('address', 'AddressController');
     Route::get('address/delete/{id}',['as'=>'address.delete','uses'=>'AddressController@delete']);

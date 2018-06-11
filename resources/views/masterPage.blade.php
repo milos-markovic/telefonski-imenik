@@ -27,11 +27,11 @@ and open the template in the editor.
                         <li><a href="{{ url('/') }}">Index</a></li>
                         @if(Auth::user())
                             @if(Auth::user()->usertype->name == 'admin')
-                                <li><a href='{{ url('admin') }}'>Admin</a></li>
-                                <li><a href="{{ url('admin/users') }}">User</a></li>
+                                <li><a href="{{ route('admins.index') }}">Admin</a></li>
+                                <li><a href='{{ url('admin/users') }}'>User</a></li>
                                 <li><a href='{{ url('address') }}'>Phones</a></li>
                             @elseif(Auth::user()->usertype->name == 'user')
-                                <li><a href="{{ url('user') }}">User</a></li>
+                                <li><a href="{{ url('users') }}">User</a></li>
                                 <li><a href="{{ url('address') }}">Phones</a></li>
                             @endif
                         @endif
@@ -77,7 +77,7 @@ $(document).ready(function() {
     
     
 
-    $('#lastName').on('keyup', function (e) {
+    $('#lastName').on('keyup', function () {
     
         $(".indexTable tbody tr").remove();
 

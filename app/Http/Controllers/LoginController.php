@@ -23,9 +23,9 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             
             if(Auth::user()->usertype->name == 'admin'){
-                return redirect('admin');
+                return redirect()->route('admins.index');
             }elseif(Auth::user()->usertype->name == 'user'){
-                return redirect('user');
+                return redirect('users');
             }
         }
         return redirect()->back();

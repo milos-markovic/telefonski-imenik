@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\NewUserRequest;
 
 class AdminController extends Controller
 {
@@ -20,7 +22,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.getAdmins')->with('admins',\App\User::where('usertype_id',1)->get());
+        $admins = \App\Usertype::find(1)->users;
+ 
+        return view('admin.index',compact('admins'));
     }
 
     /**
@@ -30,7 +34,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.getNewAdmin');
+        return view('admin.create');
     }
 
     /**
@@ -43,7 +47,7 @@ class AdminController extends Controller
     {
         $newAdmin = \App\Usertype::find(1)->users()->create($request->all());
         
-        return redirect('admin')->with('status','You have successfully insert new admin user');
+        return redirect()->route('admins.index')->with('status','You have successfully insert new admin user');
     }
 
     /**
@@ -65,7 +69,9 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.getEditAdmin')->with('admin',  \App\User::find($id));
+        $admin = \App\User::find($id);
+                
+        return view('admin.edit',compact('admin'));
     }
 
     /**
@@ -75,11 +81,12 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
+        
         $updateAdmin = \App\User::find($id)->update($request->all());
         
-        return redirect('admin')->with('status','You have successfully update admin user');
+        return redirect()->route('admins.index')->with('status','You have successfully update admin user');
     }
 
     /**
@@ -90,13 +97,49 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-    public function delete($id){
-        
         $admin = \App\User::findOrFail($id);
         
         $admin->delete();
-        return redirect('admin')->with('status','You have successfully delete admin user');
+        return redirect()->route('admins.index')->with('status','You have successfully delete admin user');
+    }
+    
+    public function users(){
+        
+        $users = \App\Usertype::find(2)->users;
+        
+        return view('admin.users',compact('users'));
+    }
+    
+    public function editUser($id){
+                
+        $user = \App\User::find($id);
+        
+        return view('admin.editUser',compact('user'));
+    }
+   
+    public function updateUser(UpdateUserRequest $request, $id){
+        
+       $user = \App\User::find($id)->update($request->all());
+       
+       return redirect('admin/users')->with('status','You have successfully update user');
+    }
+  
+    public function createUser(){
+        
+        return view('admin.createUser');
+    }
+    
+    public function storeUser(NewUserRequest $request){
+        
+        $create = \App\Usertype::find(2)->users()->create($request->all());
+        
+        return redirect('admin/users')->with('status','You have successfully insert new user');
+    }
+    
+    public function destroyUser($id){
+        
+        \App\User::find($id)->delete();
+        
+        return redirect('admin/users')->with('status','You have successfully delete User');
     }
 }

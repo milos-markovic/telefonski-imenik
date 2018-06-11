@@ -6,8 +6,18 @@
 
 <center>
     <h2>New user</h2><br>
+    
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <form action='{{ route('storeAdminUser') }}' method='POST'>
+    <form action='{{ route('users.store') }}' method='POST'>
         {{ csrf_field() }}
         <p class='form-group'>
             <label for='firstName'>First name:</label><br>

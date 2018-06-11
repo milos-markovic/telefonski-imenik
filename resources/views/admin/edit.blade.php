@@ -8,11 +8,21 @@
     <h2>Update admin</h2><br>
 
 
-    <form action="{{ route('admin.update',$admin->id) }}" method="POST">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
+    <form action="{{ route('admins.update',$admin->id) }}" method="POST">
         {{ csrf_field() }}
-        <p>
-            <input name="_method" type="hidden" value="PUT">
-        </p>
+        
+        {{ method_field('PUT') }}
+        
         <p class="form-group">
             <label for="firstName">First name:</label><br>
             <input type="text" name="firstName" id="firstName" value="{{ $admin->firstName }}" class="form-control" />

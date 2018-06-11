@@ -5,51 +5,96 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\NewUserRequest;
 use App\Http\Controllers\Controller;
-use Auth;
 
 class UserController extends Controller
 {
-    function __construct() {
-        $this->middleware('auth');
-    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $user = \Auth::user();
     
-    public function getAdminUsers(){
+        return view('user.index',compact('user'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('user.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(NewUserRequest $request)
+    {
+        $createUser = \App\Usertype::find(2)->users()->create($request->all());
         
-        return view('user.getAdminUsers')->with('users',\App\User::where('usertype_id',2)->get());
+        return redirect()->route('users.index')->with('status','You have successfully entered a new user');
     }
-    
-    public function getEditAdminUser($id){
-        return view('user.getEditAdminUser')->with('user',\App\User::findOrFail($id));
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
-    
-    public function postUpdateAdminUser(Requests\UpdateUserRequest $request, $id){
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $user = \App\User::find($id);
         
+        return view('user.edit',compact('user'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateUserRequest $request, $id)
+    {
+  
         $updateUser = \App\User::find($id)->update($request->all());
         
-        return redirect('admin/users')->with('status','You have successfully update user');
+        return redirect()->route('users.index')->with('status','You have successfully update user');
     }
-    
-    public function getNewAdminUser(){
-        return view('user.getNewAdminUser');
-    }
-    
-    public function postNewUser(Requests\NewUserRequest $request){
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {        
+        $user = \App\User::find($id)->delete();
         
-        $newUser = \App\Usertype::find(2)->users()->create($request->all());
-        
-        return redirect('admin/users')->with('status','You have successfully insert new user');
-    }
-    public function getDeleteAdminUser($id){
-        
-        $user = \App\User::findOrFail($id);
-        
-        $user->delete();
-        
-        return redirect('admin/users')->with('status','You have successfully delete user');
-    }
-    
-    public function getUser(){
-        return view('user.getUser')->with('user',Auth::user());
+        return redirect()->route('users.index')->with('status','You have successfully delete user');
     }
 }
